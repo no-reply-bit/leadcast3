@@ -478,3 +478,18 @@ body::before {
   width:100%; height:420px; display:block;
 }
 .service__video{ object-fit:cover; }
+
+/* Safari / iPad：動画マスクを隠し、フォールバック見出しを表示 */
+.is-safari .service__mask { display: none !important; }
+.is-safari .service__fallback {
+  display: block !important;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: .08em;
+  margin: 0 0 16px;
+  font-size: clamp(48px, 12vw, 120px);
+
+  /* 画像クリップ（対応ブラウザはリッチ表示） */
+  background: url("images/service_poster.jpg") center/cover no-repeat;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}

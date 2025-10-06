@@ -147,6 +147,7 @@
 
 
 
+
 /* ========== 3) ≤768px：スマホ最適（ボタン縦積み 等） ========== */
 @media (max-width: 768px){
   .brand__logo{ width:48px; }
@@ -246,4 +247,42 @@
     font-weight:800; color:var(--brand); letter-spacing:.08em;
     font-size:clamp(32px,12vw,56px);
   }
+}
+
+
+/* --- SERVICE 見出しの確実表示ルール --- */
+
+/* Safari / iPad：動画マスクを隠し、フォールバック見出しを表示 */
+.is-safari .service__mask { display: none !important; }
+.is-safari .service__fallback {
+  display: block !important;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: .08em;
+  margin: 0 0 16px;
+  font-size: clamp(48px, 12vw, 120px);
+
+  /* 画像クリップ（対応ブラウザはリッチ表示） */
+  background: url("images/service_poster.jpg") center/cover no-repeat;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* スマホ/タブレット（≤1024px）：動画マスクを使わず、青文字見出しを表示 */
+@media (max-width: 1024px) {
+  .service__mask { display: none !important; }
+
+  /* フォールバック見出しを“必ず”表示（!importantで後勝ち） */
+  .service__fallback {
+    display: block !important;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: .08em;
+    margin: 0 0 16px;
+    font-size: clamp(32px, 12vw, 56px);
+    background: none !important;   /* 画像クリップを無効化して */
+    color: var(--brand) !important;/* プレーンな青文字に */
+  }
+
+  /* （重複防止）擬似要素の見出しを使っている場合は無効化 */
+  .service::before { content: none !important; }
 }
