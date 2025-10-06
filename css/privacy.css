@@ -1,0 +1,131 @@
+/* ======================================================
+   privacy.css — シンプル版
+   背景：白、文字：濃いグレー
+   ====================================================== */
+:root {
+  --bg: #ffffff;
+  --ink: #222;
+  --ink-weak: #555;
+  --line: #ddd;
+  --accent: #0b4bf2;
+  --container: 1100px;
+  --radius: 10px;
+  --ff-sans: "Noto Sans JP", system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ff-sans);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* コンテナ */
+.container.policy-single {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(32px, 6vw, 64px) 20px;
+}
+
+/* タイトル */
+.page-title {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 6vw, 54px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: .02em;
+  color: var(--accent);
+}
+
+.lead {
+  color: var(--ink-weak);
+  font-size: 1.05rem;
+  margin: 8px 0 24px;
+}
+
+/* セクション見出し */
+h2 {
+  margin: 32px 0 12px;
+  font-size: 1.4rem;
+  border-left: 4px solid var(--accent);
+  padding-left: 10px;
+}
+
+/* テキスト */
+p {
+  margin: 0 0 14px;
+  color: var(--ink-weak);
+}
+
+ul {
+  padding-left: 1.4em;
+  margin: 0 0 1.2em;
+}
+
+li + li {
+  margin-top: .4em;
+}
+
+/* 表風の定義リスト */
+.table-like {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fafafa;
+}
+
+.table-like dt {
+  color: var(--ink-weak);
+  font-weight: 600;
+}
+.table-like dd {
+  margin: 0;
+}
+
+/* 備考 */
+.note {
+  color: var(--ink-weak);
+  margin-top: 24px;
+  font-size: 0.9rem;
+}
+
+/* フッター */
+.site-footer {
+  padding: 32px 0;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  color: var(--ink-weak);
+  background: #fff;
+}
+
+.site-footer nav {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.site-footer a {
+  color: var(--ink-weak);
+  text-decoration: none;
+}
+.site-footer a:hover {
+  color: var(--accent);
+}
+
+/* モバイル最適化 */
+@media (max-width: 720px) {
+  .page-title {
+    font-size: clamp(24px, 8vw, 36px);
+  }
+  .table-like {
+    grid-template-columns: 1fr;
+  }
+}

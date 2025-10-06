@@ -1,0 +1,590 @@
+/* ==========================================================================
+   LEAD CAST – main.css (Desktop First)
+   ========================================================================== */
+
+/* === 0. Tokens / Base === */
+:root{
+  --bg:#ffffff; --ink:#1e1f23; --ink-weak:#5b5e66;
+  --brand:#0b4bf2; --brand-ink:#ffffff;
+  --line:#e9ecf1; --muted:#f6f8fb; --accent:#0fd0b5;
+
+  --ff-sans:"Noto Sans JP", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+
+  --fs-14:.875rem; --fs-16:1rem; --fs-18:1.125rem; --fs-20:1.25rem;
+  --fs-24:1.5rem; --fs-32:2rem; --fs-40:2.5rem; --fs-56:3.5rem;
+
+  --container:1120px;
+  --space-8:.5rem; --space-12:1rem; --space-16:1.25rem; --space-20:1.5rem; --space-24:2rem; --space-32:2.5rem;
+  --radius:14px; --shadow:0 10px 30px rgba(10,22,50,.08);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family:var(--ff-sans);
+  color:var(--ink);
+  line-height:1.7;
+
+  /* === 背景画像設定 === */
+  background: url("../images/haikei5.jpg") center center / cover no-repeat fixed #ffffff;
+}
+
+img,video{ display:block; max-width:100%; height:auto; }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.container{ width:min(100% - 64px, var(--container)); margin-inline:auto; }
+.eyebrow{ font-size:var(--fs-14); letter-spacing:.08em; color:var(--ink-weak); margin:0 0 var(--space-8); }
+.nowrap{ white-space:nowrap; }
+
+.skip{
+  position:absolute; left:-9999px; top:0;
+  padding:8px 12px; background:#000; color:#fff; z-index:9999;
+}
+.skip:focus{ left:16px; top:12px; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-sans);
+  color: var(--ink);
+  line-height: 1.7;
+  background: url("../images/haikei5.jpg") center center / cover no-repeat fixed;
+  position: relative;
+}
+
+/* ← 白っぽい透明レイヤーを上にかける */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.3); /* ← 数値を変えて明るさ調整（0.2〜0.6） */
+  z-index: -1;
+}
+
+/* === 1) Header / GNav === */
+.site-header{
+  position: sticky; top: 0; z-index: 1000;
+  backdrop-filter: saturate(180%) blur(8px);
+  background: color-mix(in oklab, #ffffff 82%, transparent);
+  border-bottom: 1px solid var(--line);
+  transition: transform .25s ease;
+}
+.site-header .container{
+  display: flex; align-items: center; gap: 16px;
+  justify-content: space-between;
+}
+.brand{
+  order: 0; display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; color: var(--ink); text-decoration: none;
+}
+.brand__logo{ width: 64px; height: auto; }
+.brand__text{ font-weight: 900; letter-spacing: .06em; font-size: var(--fs-18); }
+
+.global-nav{
+  order: 1; display: flex; align-items: center; gap: 18px;
+  margin-left: auto;
+}
+.global-nav a{ color: var(--ink); padding: 6px 8px; border-radius: 8px; }
+.global-nav .btn{ color: var(--brand-ink); }
+.nav-toggle{ display: none; }
+.site-header.is-hidden{ transform: translateY(-100%); }
+
+/* === 2. Buttons === */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:10px 16px; border-radius:999px; border:1px solid transparent;
+  font-weight:700; transition:transform .06s ease, box-shadow .2s ease, background .2s ease;
+  text-decoration:none;
+}
+.btn:hover{ text-decoration:none; transform:translateY(-1px); box-shadow:var(--shadow); }
+.btn--lg{ padding:14px 22px; font-size:var(--fs-16); }
+.btn--primary{ background:var(--brand); color:#fff; }
+.btn--secondary{ background:#101828; color:#fff; }
+.btn--outline{ background:#fff; border-color:#cfd6e4; color:var(--ink); }
+
+.btn-cta{
+  position:fixed; right:22px; bottom:22px; z-index:900;
+  background:var(--brand); color:#fff; border-radius:999px; padding:12px 18px; box-shadow:var(--shadow);
+}
+
+/* === 3. HERO === */
+.hero{ padding:84px 0; background:transparent; overflow:hidden; }
+.hero__inner{ display:grid; gap:48px; align-items:center; grid-template-columns:1.05fr .95fr; }
+.hero__title{ font-size:var(--fs-56); line-height:1.1; margin:.2em 0 .4em; }
+.hero__brand{ font-weight:900; letter-spacing:.18em; color:#394150; opacity:.55; margin:.2em 0 1em; }
+.hero__actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.hero__media img{ width:560px; max-width:100%; margin-left:auto; filter:drop-shadow(0 20px 50px rgba(30,40,90,.15)); }
+
+/* === 4. Stats / Logos === */
+.stats {
+  background: transparent;
+  border-block: 1px solid var(--line);
+}
+.stats .container {
+  padding: 18px 0;
+  text-align: center;
+}
+.stats__badge{
+  font-weight:900;
+  letter-spacing:.08em;
+  margin:0;
+  font-size: 1.3em; /* 1.3倍に拡大 */
+}
+
+.stats__note{
+  margin:.2rem 0 0;
+  color:var(--ink-weak);
+  font-size: calc(var(--fs-14) * 1.3); /* 元の変数を1.3倍 */
+}
+
+/* ロゴスライダー */
+.logos {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  overflow: hidden;
+}
+
+.logos__track {
+  display: flex;
+  align-items: center;
+  gap: 80px; /* ← 間隔を広げた */
+  min-width: 200%;
+  animation: marquee 60s linear infinite; /* ← ゆっくり流す */
+}
+
+.logos__track img {
+  height: 60px; /* ← 少し大きめでもOK */
+  width: auto;
+  opacity: 0.95; /* ← カラーに見せる */
+  filter: none; /* ← モノクロ解除 */
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+
+
+/* === 5. About === */
+.about {
+  padding: 72px 0;
+  background: transparent;
+}
+.about__grid {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+  grid-template-columns: 1.1fr .9fr;
+}
+.about__title {
+  font-size: var(--fs-40);
+  margin: .2em 0 .6em;
+}
+.about__lead {
+  font-size: var(--fs-16);
+  color: #2a2d33;
+}
+.about__video {
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* === 6. Company === */
+.company {
+  padding: 72px 0;
+  background: transparent;
+}
+
+/* 見出し（会社概要・沿革） */
+.kv,
+.company .history h2 {
+  font-size: var(--fs-40);
+  margin: 0 0 18px;
+  text-align: left;
+}
+
+/* 会社概要テーブル */
+.company__table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 0 0 24px;
+  border-top: 1px solid var(--line);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.company__table > div {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* 沿革リスト */
+.history {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+.history__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.history__list li {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+}
+.history__list .year {
+  display: inline-block;
+  width: 100px;
+  font-weight: bold;
+  color: #000; /* ← 黒に変更 */
+}
+
+
+
+
+/* === 7. Service === */
+.service{ padding:72px 0; background:transparent; border-top:1px solid var(--line); }
+.service__mask{ width:100%; max-width:1200px; margin:0 auto 24px; }
+.services{ display:grid; gap:24px; grid-template-columns:1fr 1fr; }
+.svc{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); }
+
+.svc__img {
+  display: block;
+  margin: 0 auto 16px;
+  width: auto;
+  height: 300px; /* ここで高さを統一 */
+  object-fit: contain; /* 画像の比率を保ったまま収める */
+}
+
+/* === 8. Team（アウトラインMEMBERを再現・左端そろえ） === */
+.team {
+  position: relative;
+  padding: 72px 0;
+  background: transparent;
+  overflow: visible;
+}
+
+/* 背景の巨大MEMBER：container左端に揃える */
+.team .container {
+  position: relative;
+}
+
+.team .container::before {
+  content: "MEMBER";
+  position: absolute;
+  left: 0;                           /* ← container内の左端に固定 */
+  top: -28px;
+  font-weight: 900;
+  font-size: clamp(64px, 12vw, 200px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(11, 75, 242, .12);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 見出し */
+.team__title {
+  position: relative;
+  z-index: 1;
+  font-size: var(--fs-40);
+  font-weight: 900;
+  letter-spacing: .06em;
+  margin: 0 0 12px;
+}
+
+.team__title::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 6px;
+  background: var(--brand);
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* リード文 */
+.team__lead {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 32px;
+}
+
+/* 横スクロール：3枚表示 */
+.team__track {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 33%;
+  gap: 24px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.member {
+  background: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  scroll-snap-align: start;
+}
+
+
+
+/* === 9. Access（見栄えアップ版） === */
+.access{
+  padding:72px 0;
+  background:transparent;
+  border-top:1px solid var(--line);
+}
+
+.access__grid{
+  display:grid;
+  grid-template-columns: .9fr 1.1fr;   /* 左カード / 右マップ */
+  gap:28px;
+  align-items:start;
+}
+
+/* 左の情報カード */
+.access__card{
+  background: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.access__title{
+  display:flex; align-items:baseline; gap:10px;
+  margin: 0 0 14px;
+}
+.access__title .jp{ font-weight:900; font-size: var(--fs-20); }
+.access__title .en{ font-size: var(--fs-14); color: var(--ink-weak); letter-spacing:.12em; }
+
+.access__list{
+  display:grid;
+  grid-template-columns: 88px 1fr;   /* ラベル幅 / 本文 */
+  gap:12px 14px;
+  margin:0;
+}
+.access__list dt{ color: var(--ink-weak); }
+.access__list dd{ margin:0; }
+
+/* 右の地図カード */
+.access__map{
+  position:relative;
+  border-radius: var(--radius);
+  overflow: hidden;                  /* 角丸を効かせる */
+  box-shadow: var(--shadow);
+  background: #fff;
+}
+.access__map iframe{
+  display:block;
+  width:100%;
+  aspect-ratio: 16 / 10;             /* 比率を固定して美しく */
+  min-height: 320px;                  /* 小さすぎ対策 */
+  border:0;
+  filter: saturate(1.05) contrast(1.05) brightness(1.02);
+  transition: transform .3s ease, filter .3s ease;
+}
+.access__map:hover iframe{
+  transform: scale(1.01);            /* ほんの少しだけ持ち上げる */
+  filter: saturate(1.1) contrast(1.08) brightness(1.04);
+}
+
+/* 「Googleマップで開く」リンクの間隔だけ整える */
+.access__map + p{ margin:8px 0 0; }
+
+
+/* === 10. Footer === */
+.site-footer{ padding:24px 0 72px; border-top:1px solid var(--line); background:transparent; text-align:center; }
+
+
+/* ===== ふわっと表示・文字ポップ ===== */
+.split-chars .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  animation: popIn var(--stagger, 0.03s) ease-out forwards;
+  animation-delay: calc(var(--base, 0.6s) + var(--i) * var(--stagger, 0.03s));
+}
+
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== セクションふわっと ===== */
+.fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
+}
+.fade-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === Scroll Reveal (JSが有効な時だけ適用) === */
+.js-enabled .fade-up{
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.js-enabled .fade-up.is-visible{
+  opacity: 1;
+  transform: none;
+}
+
+/* 段階表示（任意） */
+.js-enabled [data-stagger] > *{
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.js-enabled [data-stagger].is-visible > *{
+  opacity: 1;
+  transform: none;
+}
+.js-enabled [data-stagger].is-visible > *:nth-child(n){
+  transition-delay: calc(0.06s * var(--i, 0));
+}
+
+
+.js-enabled .fade-up{opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s ease;}
+.js-enabled .fade-up.is-visible{opacity:1; transform:none;}
+
+.js-enabled [data-stagger] > *{opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease;}
+.js-enabled [data-stagger].is-visible > *{opacity:1; transform:none;}
+.js-enabled [data-stagger].is-visible > *:nth-child(n){transition-delay: calc(0.06s * var(--i, 0));}
+
+
+
+
+/* スマホ用の本格対応ここから */
+
+
+
+/* === Mobile (≤ 768px) === */
+@media (max-width: 768px){
+  .site-header .container{ gap:10px; }
+  .brand__logo{ width:44px; }
+  .brand__text{ font-size:1rem; white-space:nowrap; }
+
+  /* ハンバーガー表示 */
+  .nav-toggle{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:42px; height:42px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+    font-size:22px; line-height:1;
+  }
+
+  /* ドロワーナビ */
+  .global-nav{
+    position: fixed;
+    inset: 0 0 0 auto;           /* 右から出す */
+    width: min(78vw, 320px);
+    background:#fff;
+    border-left:1px solid var(--line);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    transform: translateX(100%);
+    transition: transform .25s ease;
+    box-shadow: var(--shadow);
+    z-index: 1200;
+  }
+  /* 開いた時 */
+  .global-nav.is-open{ transform: translateX(0); }
+
+  /* リンク見た目 */
+  .global-nav a{
+    white-space:nowrap;
+    padding:10px 12px;
+    border-radius:10px;
+  }
+  .global-nav .btn{ text-align:center; }
+
+  /* デスクトップ用の横並びは打ち消し */
+  .global-nav{ margin-left:0; }
+}
+
+/* デスクトップでは折返し禁止を維持 */
+.global-nav, .site-header .container{ flex-wrap:nowrap; }
+.global-nav a{ white-space:nowrap; }
+.brand__text{ white-space:nowrap; }
+
+
+/* 動きを減らしたいユーザー配慮（任意） */
+@media (prefers-reduced-motion: reduce){
+  .js-enabled .fade-up,
+  .js-enabled [data-stagger] > *{
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* レスポンシブ（スマホ表示時） */
+@media (max-width: 768px) {
+  .company__table > div {
+    grid-template-columns: 1fr;
+  }
+  .history__list .year {
+    width: auto;
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+  .team .container::before {
+    top: -10px;
+    font-size: clamp(48px, 20vw, 128px);
+  }
+  .team__track {
+    grid-auto-columns: 78%;
+    gap: 16px;
+  }
+}
+
+
+/* レスポンシブ */
+@media (max-width: 900px){
+  .access__grid{ grid-template-columns:1fr; gap:20px; }
+  .access__list{ grid-template-columns: 72px 1fr; }
+  .access__map iframe{ min-height: 260px; }
+}
+/* === 11. Responsive === */
+@media (max-width:1200px){
+  .hero{ padding:72px 0; }
+  .hero__inner{ gap:36px; grid-template-columns:1fr 1fr; }
+  .hero__title{ font-size:calc(var(--fs-56) - .5rem); }
+}
+@media (max-width:768px){
+  .container{ width:min(100% - 32px, var(--container)); }
+  .hero{ padding:48px 0; }
+  .hero__inner{ grid-template-columns:1fr; gap:24px; }
+  .hero__media{ order:-1; }
+  .hero__title{ font-size:var(--fs-40); }
+}
