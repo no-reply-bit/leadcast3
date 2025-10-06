@@ -1,0 +1,294 @@
+/* ==========================================================================
+   LEAD CAST – responsive.css
+   目的：main.css（PC前提）を維持しつつ、モバイル/タブレット最適化を別ファイルで上書き
+   構成：全体設定 → ヘッダー/ナビ → Hero → Stats/Logos → About → Company
+        → Service → Team → Access → Footer → 汎用ユーティリティ
+   使い方：index.html の main.css の後に読み込む
+   ========================================================================== */
+
+
+/* ========================================
+   0) 全体設定（段階的ブレークポイント）
+   ----------------------------------------
+   目安：
+   - 1200px以下：レイアウトを少し凝縮
+   - 1024px以下：タブレット化（2→1カラム化が増える）
+   - 768px以下 ：スマホ化（基本1カラム、文字と余白を最適化）
+   - 480px以下 ：小型端末向けの微調整
+   ======================================== */
+
+
+/* ---------- 1200px 以下：やや凝縮 ---------- */
+@media (max-width: 1200px) {
+  /* コンテナの横余白を少し増やして読みやすく */
+  .container { width: min(100% - 40px, var(--container)); }
+
+  /* ヒーローのグリッド間隔を少し詰める */
+  .hero__inner { gap: 36px; }
+}
+
+
+/* ---------- 1024px 以下：タブレット最適化 ---------- */
+@media (max-width: 1024px) {
+
+  /* ----------------------------------------
+     1) ヘッダー / グローバルナビ（モバイルドロワー）
+     ---------------------------------------- */
+
+  /* ハンバーガーを表示 */
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; min-height: 40px; }
+
+  /* PC横並びナビはタブレット以下でドロワー化 */
+  .global-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    inset-block: 0;
+    width: min(88vw, 360px);
+    background: color-mix(in oklab, #ffffff 96%, transparent);
+    box-shadow: -20px 0 40px rgba(16, 24, 40, .08);
+    padding: 80px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-left: 1px solid var(--line);
+
+    /* 初期は閉じる */
+    transform: translateX(100%);
+    transition: transform .28s ease;
+  }
+  .global-nav.is-open { transform: translateX(0); }
+
+  /* ドロワー内のリンクはタップしやすく */
+  .global-nav a { padding: 12px 14px; border-radius: 10px; }
+  .global-nav .btn { text-align: center; }
+
+  /* 画面固定用（JSで body に .no-scroll を付与） */
+  body.no-scroll { overflow: hidden; }
+
+  /* オーバーレイ（app.js が body 直下に #nav-overlay を生成） */
+  #nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 24, 40, .3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    z-index: 999; /* ヘッダー(1000)の下に敷く */
+  }
+  #nav-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ヘッダ内部の並びを圧縮 */
+  .site-header .container { gap: 8px; }
+  .brand__logo { width: 56px; }
+  .brand__text { font-size: var(--fs-16); }
+
+
+  /* ----------------------------------------
+     2) Hero
+     ---------------------------------------- */
+  .hero { padding: 64px 0; }
+  .hero__inner {
+    grid-template-columns: 1fr;      /* 1カラムに */
+    text-align: center;
+  }
+  .hero__title { font-size: clamp(2rem, 5.8vw, var(--fs-56)); }
+  .hero__brand { margin-bottom: 12px; }
+  .hero__actions { justify-content: center; }
+  .hero__media img { margin: 0 auto; width: min(520px, 92%); }
+
+
+  /* ----------------------------------------
+     3) Stats / Logos
+     ---------------------------------------- */
+  .stats .container { padding: 16px 0; }
+  .stats__badge { font-size: 1.1em; }
+  .stats__note { font-size: calc(var(--fs-14) * 1.1); }
+
+  .logos { padding: 28px 0; }
+  .logos__track { gap: 56px; animation-duration: 50s; }
+  .logos__track img { height: 48px; }
+
+
+  /* ----------------------------------------
+     4) About
+     ---------------------------------------- */
+  .about { padding: 60px 0; }
+  .about__grid { grid-template-columns: 1fr; gap: 24px; }
+  .about__title { font-size: clamp(1.75rem, 4.6vw, var(--fs-40)); }
+  .about__lead { font-size: var(--fs-16); }
+  .about__video { max-width: 960px; margin: 0 auto; }
+
+
+  /* ----------------------------------------
+     5) Company（会社概要・沿革）
+     ---------------------------------------- */
+  .company { padding: 60px 0; }
+  .kv { font-size: clamp(1.6rem, 4.4vw, var(--fs-40)); }
+
+  .company__table {
+    font-size: 1rem;
+    gap: 6px;
+  }
+  .company__table > div {
+    grid-template-columns: 140px 1fr; /* ラベル幅を少し短く */
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+
+  /* ----------------------------------------
+     6) Service
+     ---------------------------------------- */
+  .service { padding: 64px 0; }
+  .services { grid-template-columns: 1fr; gap: 20px; }
+  .svc { padding: 18px; }
+  .svc__img { height: 240px; }
+
+
+  /* ----------------------------------------
+     7) Team（横スクロール3枚→2枚寄り）
+     ---------------------------------------- */
+  .team { padding: 64px 0; }
+  .team .container::before {
+    font-size: clamp(56px, 18vw, 140px); /* 背景MEMBERのサイズ縮小 */
+    top: -18px;
+  }
+  .team__title { font-size: clamp(1.6rem, 4.4vw, var(--fs-40)); }
+  .team__track {
+    grid-auto-columns: 50%;
+  }
+
+
+  /* ----------------------------------------
+     8) Access（2カラム→1カラム）
+     ---------------------------------------- */
+  .access { padding: 64px 0; }
+  .access__grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .access__map iframe { min-height: 280px; }
+
+
+  /* ----------------------------------------
+     9) Footer
+     ---------------------------------------- */
+  .site-footer { padding: 20px 0 56px; }
+}
+
+
+/* ---------- 768px 以下：スマホ最適化 ---------- */
+@media (max-width: 768px) {
+
+  /* ヘッダのロゴと文字をさらに小さく */
+  .brand__logo { width: 48px; }
+  .brand__text { font-size: var(--fs-14); }
+
+  /* Hero ボタンは縦積み・幅広に */
+  .hero__actions { flex-direction: column; align-items: stretch; }
+  .hero__actions .btn { width: 100%; }
+
+  /* Stats/Logos の密度をさらに調整 */
+  .logos__track { gap: 40px; animation-duration: 42s; }
+  .logos__track img { height: 42px; }
+
+  /* 会社概要のラベル幅をコンパクトに */
+  .company__table > div { grid-template-columns: 120px 1fr; }
+
+  /* サービス画像をもう少し小さく */
+  .svc__img { height: 200px; }
+
+  /* Team：カード幅を広げて1.2〜1.4枚見えるイメージ */
+  .team__track { grid-auto-columns: 72%; }
+
+  /* Access：地図の最低高さを確保 */
+  .access__map iframe { min-height: 260px; }
+
+  /* 固定CTA の幅・余白を調整（親指タップ前提） */
+  .btn-cta { right: 16px; bottom: 16px; padding: 12px 16px; }
+}
+
+
+/* ---------- 600px 以下：文字と余白の最適化 ---------- */
+@media (max-width: 600px) {
+
+  /* 全体の行間を少し広げて読みやすく */
+  body { line-height: 1.8; }
+
+  /* Hero タイトルの行間を詰め気味に */
+  .hero__title { line-height: 1.12; }
+
+  /* Stats の文言をやや小さく */
+  .stats__badge { font-size: 1em; }
+  .stats__note { font-size: var(--fs-14); }
+
+  /* About の見出しを少し縮小 */
+  .about__title { font-size: clamp(1.5rem, 5vw, 1.75rem); }
+
+  /* 会社概要：モバイルでは1項目ごとにブロック感を強める */
+  .company__table > div {
+    grid-template-columns: 1fr; /* ラベル/本文を縦積み */
+    gap: 6px;
+  }
+
+  /* Team 背景テキストを控えめに */
+  .team .container::before { -webkit-text-stroke: 2px rgba(11, 75, 242, .10); }
+
+  /* フッターのリンクは折り返し前提で余白調整 */
+  .site-footer nav a { display: inline-block; margin: 4px 8px; }
+}
+
+
+/* ---------- 480px 以下：小型端末の微調整 ---------- */
+@media (max-width: 480px) {
+
+  /* ヘッダ */
+  .site-header .container { padding-block: 6px; }
+  .brand__logo { width: 44px; }
+  .nav-toggle { min-width: 36px; min-height: 36px; }
+
+  /* Hero 画像をやや小さく */
+  .hero__media img { width: 88%; }
+
+  /* ロゴスライダー */
+  .logos__track { gap: 28px; animation-duration: 36s; }
+  .logos__track img { height: 36px; }
+
+  /* サービスカードのパディングを控えめに */
+  .svc { padding: 16px; }
+  .svc__img { height: 180px; }
+
+  /* Team：さらに1枚表示寄り */
+  .team__track { grid-auto-columns: 86%; }
+
+  /* アクセス地図の高さ */
+  .access__map iframe { min-height: 220px; }
+
+  /* 固定CTA ボタンをやや小ぶりに */
+  .btn-cta { padding: 10px 14px; font-size: var(--fs-14); border-radius: 999px; }
+}
+
+
+/* ========================================
+   10) 汎用ユーティリティ（上書き補助）
+   ======================================== */
+
+/* タップしやすさ（小端末での a / button の最小サイズ目安） */
+@media (max-width: 768px) {
+  a, button { touch-action: manipulation; }
+  .btn { min-height: 44px; }
+}
+
+/* メディア（img, video）のはみ出し防止 */
+@media (max-width: 768px) {
+  img, video { max-width: 100%; height: auto; }
+}
+
+/* スクロールアニメの閾値が厳しすぎる時の救済（任意） */
+@media (max-width: 768px) {
+  .js-enabled .fade-up { transition-duration: .7s; transform: translateY(22px); }
+}
