@@ -257,3 +257,38 @@
   /* スクロール演出の移動量を控えめに（視差酔い対策） */
   .js-enabled .fade-up{ transition-duration:.7s; transform:translateY(22px); }
 }
+
+
+
+/* 初期はフォールバックを隠す */
+.service__fallback{ display:none; }
+
+/* Safari/iPad を検出したら動画マスクを隠してフォールバック表示 */
+.is-safari .service__mask{ display:none !important; }
+.is-safari .service__fallback{
+  display:block;
+  text-align:center;
+  font-weight:800;
+  letter-spacing:.08em;
+  margin:0 0 16px;
+  font-size: clamp(48px, 12vw, 120px);
+
+  /* 好みで：ポスター画像を文字にクリップ（静止画でもリッチに見える） */
+  background: url("images/service_poster.jpg") center/cover no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* クリップ非対応時の保険（青文字） */
+  /* color: var(--brand); */
+}
+
+/* 既にスマホでは動画マスクを消して青文字にしているのでそのまま維持 */
+@media (max-width:1024px){
+  .service__mask{ display:none !important; }
+  .service::before{
+    content:"SERVICE"; display:block; text-align:center; margin:0 0 16px;
+    font-weight:800; color:var(--brand); letter-spacing:.08em;
+    font-size:clamp(32px,12vw,56px);
+  }
+}

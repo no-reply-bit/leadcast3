@@ -185,3 +185,14 @@ const openNav = () => {
 };
 
 // 既存のクリック/ESCハンドラはそのまま利用（toggleしている箇所も既存でOK）
+
+
+// Safari / iPadOS判定（簡易UA判定でOK）
+(function(){
+  const ua = navigator.userAgent;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua) || ua.includes("Mac") && ua.includes("Version/");
+  const isiPadOS = /iPad|Macintosh/.test(ua) && 'ontouchend' in document;
+  if (isSafari || isiPadOS) {
+    document.documentElement.classList.add('is-safari');
+  }
+})();
