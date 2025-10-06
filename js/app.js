@@ -148,45 +148,6 @@ document.documentElement.classList.add('js-enabled'); // JS有効時だけ初期
 })();
 
 
-
-
-
-
-
-// 先頭付近で参照している navToggle / gnav は既存のままでOK
-
-// ① オーバーレイを用意（1回だけ作る）
-let navOverlay = document.getElementById('nav-overlay');
-if (!navOverlay) {
-  navOverlay = document.createElement('div');
-  navOverlay.id = 'nav-overlay';
-  document.body.appendChild(navOverlay);
-  navOverlay.addEventListener('click', () => closeNav());
-}
-
-const closeNav = () => {
-  if (!navToggle || !gnav) return;
-  gnav.classList.remove('is-open');
-  document.body.classList.remove('no-scroll');
-  if (navOverlay) navOverlay.classList.remove('show');
-
-  navToggle.setAttribute('aria-expanded', 'false');
-  navToggle.setAttribute('aria-label', 'メニューを開く');
-};
-
-const openNav = () => {
-  if (!navToggle || !gnav) return;
-  gnav.classList.add('is-open');
-  document.body.classList.add('no-scroll');
-  if (navOverlay) navOverlay.classList.add('show');
-
-  navToggle.setAttribute('aria-expanded', 'true');
-  navToggle.setAttribute('aria-label', 'メニューを閉じる');
-};
-
-// 既存のクリック/ESCハンドラはそのまま利用（toggleしている箇所も既存でOK）
-
-
 // Safari / iPadOS判定（簡易UA判定でOK）
 (function(){
   const ua = navigator.userAgent;

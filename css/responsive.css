@@ -25,19 +25,18 @@
 
 
 /* ========== 2) ≤1024px：タブレット＆モバイル骨格（ドロワー等） ========== */
+/* ========== 2) ≤1024px：タブレット＆モバイル骨格（ドロワー等） ========== */
 @media (max-width: 1024px){
 
-  /* --- Header / Hamburger ------------------------------------------------ */
+  /* --- Header / Hamburger --- */
   .nav-toggle{
-    /* ハンバーガーは常時表示・右上固定：ドロワーより前面 */
     display:inline-flex; align-items:center; justify-content:center;
     position:fixed; top:12px; right:12px; z-index:1102;
     min-width:40px; min-height:40px;
     background:#fff; border:1px solid #cfd6e4; border-radius:10px;
   }
-  body.no-scroll{ overflow:hidden; }           /* ドロワー開時の背面固定 */
+  body.no-scroll{ overflow:hidden; }
 
-  /* 黒半透明オーバーレイ（JSが生成） */
   #nav-overlay{
     position:fixed; inset:0; z-index:999;
     background:rgba(16,24,40,.30);
@@ -45,123 +44,84 @@
   }
   #nav-overlay.show{ opacity:1; pointer-events:auto; }
 
-  /* --- Drawer / Global Nav ------------------------------------------------
-     改善点：
-     ① 完全不透明＆backdrop無効化で“透け”防止
-     ② 画面から上下12px余白＋角丸、内部スクロール
-     ③ 幅を細身に（調整：76vw/300px）
-  ------------------------------------------------------------------------ */
-@media (max-width: 1024px){
-
-  /* 右上に常時表示のハンバーガーはそのまま */
-
-  /* ==== ドロワー本体：縦積みレイアウトを強制 ==== */
+  /* --- Drawer / Global Nav（※ここが要修正箇所） --- */
   .global-nav{
-    position: fixed;
-    z-index: 1001;
-    top: 50px; right: 12px;
-    width: min(76vw, 300px);
-    height: calc(100dvh - 350px);
-    padding: 50px 18px 20px;
+    position: fixed; z-index: 1001;
+    top: 12px; right: 12px;          /* 画面端から12px余白 */
+    width: min(76vw, 300px);          /* 細身 */
+    height: calc(100dvh - 24px);      /* 端末高 − 上下余白 */
+    padding: 72px 18px 20px;          /* 上の詰まり → 72px に調整 */
     border-radius: 18px;
     overflow: auto;
 
-    /* ←これが抜けていた（最重要） */
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    row-gap: 6px;               /* 項目の縦間隔 */
+    display: flex; flex-direction: column; align-items: stretch;
+    row-gap: 6px;
 
-    /* 不透明化＆質感 */
     background: linear-gradient(180deg,#eaf2ff 0%,#f2f6ff 100%) !important;
     background-color: #eaf2ff !important;
-    opacity: 1 !important;
-    isolation: isolate;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
+    opacity: 1 !important; isolation: isolate;
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
     box-shadow: -24px 0 48px rgba(16,24,40,.10), inset 0 1px 0 rgba(255,255,255,.7);
 
-    transform: translateX(110%);
-    transition: transform .28s ease;
+    transform: translateX(110%); transition: transform .28s ease;
   }
   .global-nav.is-open{ transform: translateX(0); }
 
-  /* ==== リンク：縦並び用の余白・矢印・セパレーター ==== */
   .global-nav a{
-    position: relative;
-    display: block;                 /* ブロック化で縦幅を確保 */
-    padding: 14px 42px 14px 20px;   /* 右は矢印ぶん広め */
-    border-radius: 12px;
-    line-height: 1.4;
-    font-weight: 700;
-    letter-spacing: .02em;
+    position: relative; display:block;
+    padding: 14px 42px 14px 20px;     /* 右は矢印ぶん広め */
+    border-radius: 12px; line-height: 1.4; font-weight:700; letter-spacing:.02em;
     transition: transform .16s ease, box-shadow .2s ease, background .2s ease;
   }
   .global-nav a:not(.btn)::after{
-    content: "";
-    position: absolute;
-    left: 12px; right: 12px; bottom: -6px;
-    height: 1px; background: rgba(16,24,40,.07);
+    content:""; position:absolute; left:12px; right:12px; bottom:-6px;
+    height:1px; background:rgba(16,24,40,.07);
   }
-  .global-nav a.btn::after{ content: none; }
-
+  .global-nav a.btn::after{ content:none; }
   .global-nav a:not(.btn)::before{
-    content: "›";
-    position: absolute;
-    top: 50%; right: 16px; transform: translateY(-50%);
-    font-size: 16px; opacity: .4;
+    content:"›"; position:absolute; top:50%; right:16px; transform:translateY(-50%);
+    font-size:16px; opacity:.4;
   }
-
   .global-nav a:hover,
   .global-nav a:focus-visible{
-    background: #fff;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(16,24,40,.08);
-    text-decoration: none;
+    background:#fff; transform:translateY(-1px);
+    box-shadow:0 8px 24px rgba(16,24,40,.08); text-decoration:none;
   }
-  .global-nav a:focus-visible{
-    outline: 2px solid #0b4bf2; outline-offset: 2px;
+  .global-nav a:focus-visible{ outline:2px solid #0b4bf2; outline-offset:2px; }
+  .global-nav a[aria-current="page"], .global-nav a.is-active{
+    background:#fff; box-shadow:inset 0 0 0 2px rgba(11,75,242,.18);
   }
-
-  /* CTA */
   .global-nav .btn{
-    margin-top: 12px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    font-weight: 900;
-    box-shadow: 0 8px 24px rgba(11,75,242,.25);
+    margin-top:12px; padding:14px 18px; border-radius:12px; font-weight:900;
+    box-shadow:0 8px 24px rgba(11,75,242,.25);
   }
-  .global-nav .btn::after{ content: " →"; }
-}
+  .global-nav .btn::after{ content:" →"; }
 
-  /* --- Hero -------------------------------------------------------------- */
+  /* --- 以下、既存セクションの調整はそのまま --- */
   .hero{ padding:64px 0; }
   .hero__inner{ grid-template-columns:1fr; text-align:center; }
   .hero__title{ font-size:clamp(2rem,5.8vw,var(--fs-56)); }
   .hero__actions{ justify-content:center; }
   .hero__media img{ margin:0 auto; width:min(520px,92%); }
 
-  /* --- Stats / Logos ----------------------------------------------------- */
   .stats .container{ padding:16px 0; }
   .logos{ padding:28px 0; }
   .logos__track{ gap:56px; animation-duration:50s; }
   .logos__track img{ height:48px; }
 
-  /* --- About ------------------------------------------------------------- */
   .about{ padding:60px 0; }
   .about__grid{ grid-template-columns:1fr; gap:24px; }
   .about__title{ font-size:clamp(1.75rem,4.6vw,var(--fs-40)); }
   .about__video{ max-width:960px; margin:0 auto; }
 
-  /* --- Company ----------------------------------------------------------- */
   .company{ padding:60px 0; }
   .kv{ font-size:clamp(1.6rem,4.4vw,var(--fs-40)); }
   .company__table{ font-size:1rem; gap:6px; }
   .company__table>div{ grid-template-columns:140px 1fr; gap:10px; padding:10px 0; }
 
-  /* --- Service：動画マスクをスマホでは非表示 → シンプル見出し --------- */
+  /* スマホ/タブレットでは動画マスクを外し、見出しだけに */
   .service{ padding:64px 0; position:relative; }
-  .service__mask{ display:none !important; }       /* ← 動画背景を無効化 */
+  .service__mask{ display:none !important; }
   .service::before{
     content:"SERVICE"; display:block; text-align:center; margin:0 0 16px;
     font-weight:800; color:var(--brand); letter-spacing:.08em;
@@ -171,25 +131,20 @@
   .svc{ padding:18px; }
   .svc__img{ height:240px; }
 
-  /* --- Team -------------------------------------------------------------- */
   .team{ padding:64px 0; }
   .team .container::before{ font-size:clamp(56px,18vw,140px); top:-18px; }
   .team__title{ font-size:clamp(1.6rem,4.4vw,var(--fs-40)); }
   .team__track{ grid-auto-columns:50%; }
 
-  /* --- Access ------------------------------------------------------------ */
   .access{ padding:64px 0; }
   .access__grid{ grid-template-columns:1fr; gap:18px; }
   .access__map iframe{ min-height:280px; }
 
-  /* --- Footer ------------------------------------------------------------ */
   .site-footer{ padding:20px 0 56px; }
 
-  /* モーション弱め指定に配慮 */
-  @media (prefers-reduced-motion: reduce){
-    .global-nav a{ transition:none; }
-  }
+  @media (prefers-reduced-motion: reduce){ .global-nav a{ transition:none; } }
 }
+
 
 
 /* ========== 3) ≤768px：スマホ最適（ボタン縦積み 等） ========== */

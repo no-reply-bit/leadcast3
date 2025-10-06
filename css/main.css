@@ -472,3 +472,9 @@ body::before {
 .js-enabled [data-stagger].is-visible > *:nth-child(n){transition-delay: calc(0.06s * var(--i, 0));}
 
 
+/* service動画のはみ出し対策（全ブラウザ） */
+.service__mask svg,
+.service__mask video.service__video{
+  width:100%; height:420px; display:block;
+}
+.service__video{ object-fit:cover; }
