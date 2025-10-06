@@ -1,294 +1,259 @@
 /* ==========================================================================
-   LEAD CAST – responsive.css
-   目的：main.css（PC前提）を維持しつつ、モバイル/タブレット最適化を別ファイルで上書き
-   構成：全体設定 → ヘッダー/ナビ → Hero → Stats/Logos → About → Company
-        → Service → Team → Access → Footer → 汎用ユーティリティ
-   使い方：index.html の main.css の後に読み込む
+   LEAD CAST – responsive.css（モバイル最適・ドロワー洗練版）
+   方針：
+   - main.css はPC前提。ここでモバイル/タブレットの上書きを行う
+   - クリーム背景へ統一、ドロワーは不透明・狭幅・角丸・内部スクロール
+   構成：0)全体 1)≤1200 2)≤1024 3)≤768 4)≤600 5)≤480 6)汎用
+   編集のコツ：コメント脇の数値だけ変えれば印象を微調整できます
    ========================================================================== */
 
 
-/* ========================================
-   0) 全体設定（段階的ブレークポイント）
-   ----------------------------------------
-   目安：
-   - 1200px以下：レイアウトを少し凝縮
-   - 1024px以下：タブレット化（2→1カラム化が増える）
-   - 768px以下 ：スマホ化（基本1カラム、文字と余白を最適化）
-   - 480px以下 ：小型端末向けの微調整
-   ======================================== */
 
+@media (max-width:1024px){
+  body{
+    background:none !important;           /* 画像を無効化 */
+    background-color:#FFF6E5 !important;  /* クリーム色 */
+  }
+  body::before{ content:none !important; }/* main.css の白レイヤを無効化 */
+}   
 
-/* ---------- 1200px 以下：やや凝縮 ---------- */
-@media (max-width: 1200px) {
-  /* コンテナの横余白を少し増やして読みやすく */
-  .container { width: min(100% - 40px, var(--container)); }
-
-  /* ヒーローのグリッド間隔を少し詰める */
-  .hero__inner { gap: 36px; }
+/* ========== 1) ≤1200px：やや凝縮（PC→タブレット手前） ========== */
+@media (max-width: 1200px){
+  .container{ width:min(100% - 40px, var(--container)); }
+  .hero__inner{ gap:36px; }
 }
 
 
-/* ---------- 1024px 以下：タブレット最適化 ---------- */
-@media (max-width: 1024px) {
+/* ========== 2) ≤1024px：タブレット＆モバイル骨格（ドロワー等） ========== */
+@media (max-width: 1024px){
 
-  /* ----------------------------------------
-     1) ヘッダー / グローバルナビ（モバイルドロワー）
-     ---------------------------------------- */
+  /* --- Header / Hamburger ------------------------------------------------ */
+  .nav-toggle{
+    /* ハンバーガーは常時表示・右上固定：ドロワーより前面 */
+    display:inline-flex; align-items:center; justify-content:center;
+    position:fixed; top:12px; right:12px; z-index:1102;
+    min-width:40px; min-height:40px;
+    background:#fff; border:1px solid #cfd6e4; border-radius:10px;
+  }
+  body.no-scroll{ overflow:hidden; }           /* ドロワー開時の背面固定 */
 
-  /* ハンバーガーを表示 */
-  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; min-height: 40px; }
+  /* 黒半透明オーバーレイ（JSが生成） */
+  #nav-overlay{
+    position:fixed; inset:0; z-index:999;
+    background:rgba(16,24,40,.30);
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  #nav-overlay.show{ opacity:1; pointer-events:auto; }
 
-  /* PC横並びナビはタブレット以下でドロワー化 */
-  .global-nav {
+  /* --- Drawer / Global Nav ------------------------------------------------
+     改善点：
+     ① 完全不透明＆backdrop無効化で“透け”防止
+     ② 画面から上下12px余白＋角丸、内部スクロール
+     ③ 幅を細身に（調整：76vw/300px）
+  ------------------------------------------------------------------------ */
+@media (max-width: 1024px){
+
+  /* 右上に常時表示のハンバーガーはそのまま */
+
+  /* ==== ドロワー本体：縦積みレイアウトを強制 ==== */
+  .global-nav{
     position: fixed;
-    top: 0;
-    right: 0;
-    inset-block: 0;
-    width: min(88vw, 360px);
-    background: color-mix(in oklab, #ffffff 96%, transparent);
-    box-shadow: -20px 0 40px rgba(16, 24, 40, .08);
-    padding: 80px 20px 24px;
+    z-index: 1001;
+    top: 50px; right: 12px;
+    width: min(76vw, 300px);
+    height: calc(100dvh - 350px);
+    padding: 50px 18px 20px;
+    border-radius: 18px;
+    overflow: auto;
+
+    /* ←これが抜けていた（最重要） */
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    border-left: 1px solid var(--line);
+    align-items: stretch;
+    row-gap: 6px;               /* 項目の縦間隔 */
 
-    /* 初期は閉じる */
-    transform: translateX(100%);
+    /* 不透明化＆質感 */
+    background: linear-gradient(180deg,#eaf2ff 0%,#f2f6ff 100%) !important;
+    background-color: #eaf2ff !important;
+    opacity: 1 !important;
+    isolation: isolate;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: -24px 0 48px rgba(16,24,40,.10), inset 0 1px 0 rgba(255,255,255,.7);
+
+    transform: translateX(110%);
     transition: transform .28s ease;
   }
-  .global-nav.is-open { transform: translateX(0); }
+  .global-nav.is-open{ transform: translateX(0); }
 
-  /* ドロワー内のリンクはタップしやすく */
-  .global-nav a { padding: 12px 14px; border-radius: 10px; }
-  .global-nav .btn { text-align: center; }
-
-  /* 画面固定用（JSで body に .no-scroll を付与） */
-  body.no-scroll { overflow: hidden; }
-
-  /* オーバーレイ（app.js が body 直下に #nav-overlay を生成） */
-  #nav-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(16, 24, 40, .3);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s ease;
-    z-index: 999; /* ヘッダー(1000)の下に敷く */
+  /* ==== リンク：縦並び用の余白・矢印・セパレーター ==== */
+  .global-nav a{
+    position: relative;
+    display: block;                 /* ブロック化で縦幅を確保 */
+    padding: 14px 42px 14px 20px;   /* 右は矢印ぶん広め */
+    border-radius: 12px;
+    line-height: 1.4;
+    font-weight: 700;
+    letter-spacing: .02em;
+    transition: transform .16s ease, box-shadow .2s ease, background .2s ease;
   }
-  #nav-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
+  .global-nav a:not(.btn)::after{
+    content: "";
+    position: absolute;
+    left: 12px; right: 12px; bottom: -6px;
+    height: 1px; background: rgba(16,24,40,.07);
   }
+  .global-nav a.btn::after{ content: none; }
 
-  /* ヘッダ内部の並びを圧縮 */
-  .site-header .container { gap: 8px; }
-  .brand__logo { width: 56px; }
-  .brand__text { font-size: var(--fs-16); }
-
-
-  /* ----------------------------------------
-     2) Hero
-     ---------------------------------------- */
-  .hero { padding: 64px 0; }
-  .hero__inner {
-    grid-template-columns: 1fr;      /* 1カラムに */
-    text-align: center;
-  }
-  .hero__title { font-size: clamp(2rem, 5.8vw, var(--fs-56)); }
-  .hero__brand { margin-bottom: 12px; }
-  .hero__actions { justify-content: center; }
-  .hero__media img { margin: 0 auto; width: min(520px, 92%); }
-
-
-  /* ----------------------------------------
-     3) Stats / Logos
-     ---------------------------------------- */
-  .stats .container { padding: 16px 0; }
-  .stats__badge { font-size: 1.1em; }
-  .stats__note { font-size: calc(var(--fs-14) * 1.1); }
-
-  .logos { padding: 28px 0; }
-  .logos__track { gap: 56px; animation-duration: 50s; }
-  .logos__track img { height: 48px; }
-
-
-  /* ----------------------------------------
-     4) About
-     ---------------------------------------- */
-  .about { padding: 60px 0; }
-  .about__grid { grid-template-columns: 1fr; gap: 24px; }
-  .about__title { font-size: clamp(1.75rem, 4.6vw, var(--fs-40)); }
-  .about__lead { font-size: var(--fs-16); }
-  .about__video { max-width: 960px; margin: 0 auto; }
-
-
-  /* ----------------------------------------
-     5) Company（会社概要・沿革）
-     ---------------------------------------- */
-  .company { padding: 60px 0; }
-  .kv { font-size: clamp(1.6rem, 4.4vw, var(--fs-40)); }
-
-  .company__table {
-    font-size: 1rem;
-    gap: 6px;
-  }
-  .company__table > div {
-    grid-template-columns: 140px 1fr; /* ラベル幅を少し短く */
-    gap: 10px;
-    padding: 10px 0;
+  .global-nav a:not(.btn)::before{
+    content: "›";
+    position: absolute;
+    top: 50%; right: 16px; transform: translateY(-50%);
+    font-size: 16px; opacity: .4;
   }
 
-
-  /* ----------------------------------------
-     6) Service
-     ---------------------------------------- */
-  .service { padding: 64px 0; }
-  .services { grid-template-columns: 1fr; gap: 20px; }
-  .svc { padding: 18px; }
-  .svc__img { height: 240px; }
-
-
-  /* ----------------------------------------
-     7) Team（横スクロール3枚→2枚寄り）
-     ---------------------------------------- */
-  .team { padding: 64px 0; }
-  .team .container::before {
-    font-size: clamp(56px, 18vw, 140px); /* 背景MEMBERのサイズ縮小 */
-    top: -18px;
+  .global-nav a:hover,
+  .global-nav a:focus-visible{
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(16,24,40,.08);
+    text-decoration: none;
   }
-  .team__title { font-size: clamp(1.6rem, 4.4vw, var(--fs-40)); }
-  .team__track {
-    grid-auto-columns: 50%;
+  .global-nav a:focus-visible{
+    outline: 2px solid #0b4bf2; outline-offset: 2px;
   }
 
-
-  /* ----------------------------------------
-     8) Access（2カラム→1カラム）
-     ---------------------------------------- */
-  .access { padding: 64px 0; }
-  .access__grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
+  /* CTA */
+  .global-nav .btn{
+    margin-top: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-weight: 900;
+    box-shadow: 0 8px 24px rgba(11,75,242,.25);
   }
-  .access__map iframe { min-height: 280px; }
+  .global-nav .btn::after{ content: " →"; }
+}
 
+  /* --- Hero -------------------------------------------------------------- */
+  .hero{ padding:64px 0; }
+  .hero__inner{ grid-template-columns:1fr; text-align:center; }
+  .hero__title{ font-size:clamp(2rem,5.8vw,var(--fs-56)); }
+  .hero__actions{ justify-content:center; }
+  .hero__media img{ margin:0 auto; width:min(520px,92%); }
 
-  /* ----------------------------------------
-     9) Footer
-     ---------------------------------------- */
-  .site-footer { padding: 20px 0 56px; }
+  /* --- Stats / Logos ----------------------------------------------------- */
+  .stats .container{ padding:16px 0; }
+  .logos{ padding:28px 0; }
+  .logos__track{ gap:56px; animation-duration:50s; }
+  .logos__track img{ height:48px; }
+
+  /* --- About ------------------------------------------------------------- */
+  .about{ padding:60px 0; }
+  .about__grid{ grid-template-columns:1fr; gap:24px; }
+  .about__title{ font-size:clamp(1.75rem,4.6vw,var(--fs-40)); }
+  .about__video{ max-width:960px; margin:0 auto; }
+
+  /* --- Company ----------------------------------------------------------- */
+  .company{ padding:60px 0; }
+  .kv{ font-size:clamp(1.6rem,4.4vw,var(--fs-40)); }
+  .company__table{ font-size:1rem; gap:6px; }
+  .company__table>div{ grid-template-columns:140px 1fr; gap:10px; padding:10px 0; }
+
+  /* --- Service：動画マスクをスマホでは非表示 → シンプル見出し --------- */
+  .service{ padding:64px 0; position:relative; }
+  .service__mask{ display:none !important; }       /* ← 動画背景を無効化 */
+  .service::before{
+    content:"SERVICE"; display:block; text-align:center; margin:0 0 16px;
+    font-weight:800; color:var(--brand); letter-spacing:.08em;
+    font-size:clamp(32px,12vw,56px);
+  }
+  .services{ grid-template-columns:1fr; gap:20px; }
+  .svc{ padding:18px; }
+  .svc__img{ height:240px; }
+
+  /* --- Team -------------------------------------------------------------- */
+  .team{ padding:64px 0; }
+  .team .container::before{ font-size:clamp(56px,18vw,140px); top:-18px; }
+  .team__title{ font-size:clamp(1.6rem,4.4vw,var(--fs-40)); }
+  .team__track{ grid-auto-columns:50%; }
+
+  /* --- Access ------------------------------------------------------------ */
+  .access{ padding:64px 0; }
+  .access__grid{ grid-template-columns:1fr; gap:18px; }
+  .access__map iframe{ min-height:280px; }
+
+  /* --- Footer ------------------------------------------------------------ */
+  .site-footer{ padding:20px 0 56px; }
+
+  /* モーション弱め指定に配慮 */
+  @media (prefers-reduced-motion: reduce){
+    .global-nav a{ transition:none; }
+  }
 }
 
 
-/* ---------- 768px 以下：スマホ最適化 ---------- */
-@media (max-width: 768px) {
+/* ========== 3) ≤768px：スマホ最適（ボタン縦積み 等） ========== */
+@media (max-width: 768px){
+  .brand__logo{ width:48px; }
+  .brand__text{ font-size:var(--fs-14); }
 
-  /* ヘッダのロゴと文字をさらに小さく */
-  .brand__logo { width: 48px; }
-  .brand__text { font-size: var(--fs-14); }
+  .hero__actions{ flex-direction:column; align-items:stretch; }
+  .hero__actions .btn{ width:100%; }
 
-  /* Hero ボタンは縦積み・幅広に */
-  .hero__actions { flex-direction: column; align-items: stretch; }
-  .hero__actions .btn { width: 100%; }
+  .logos__track{ gap:40px; animation-duration:42s; }
+  .logos__track img{ height:42px; }
 
-  /* Stats/Logos の密度をさらに調整 */
-  .logos__track { gap: 40px; animation-duration: 42s; }
-  .logos__track img { height: 42px; }
+  .company__table>div{ grid-template-columns:120px 1fr; }
+  .svc__img{ height:200px; }
+  .team__track{ grid-auto-columns:72%; }
 
-  /* 会社概要のラベル幅をコンパクトに */
-  .company__table > div { grid-template-columns: 120px 1fr; }
+  .access__map iframe{ min-height:260px; }
 
-  /* サービス画像をもう少し小さく */
-  .svc__img { height: 200px; }
-
-  /* Team：カード幅を広げて1.2〜1.4枚見えるイメージ */
-  .team__track { grid-auto-columns: 72%; }
-
-  /* Access：地図の最低高さを確保 */
-  .access__map iframe { min-height: 260px; }
-
-  /* 固定CTA の幅・余白を調整（親指タップ前提） */
-  .btn-cta { right: 16px; bottom: 16px; padding: 12px 16px; }
+  .btn-cta{ right:16px; bottom:16px; padding:12px 16px; }
 }
 
 
-/* ---------- 600px 以下：文字と余白の最適化 ---------- */
-@media (max-width: 600px) {
-
-  /* 全体の行間を少し広げて読みやすく */
-  body { line-height: 1.8; }
-
-  /* Hero タイトルの行間を詰め気味に */
-  .hero__title { line-height: 1.12; }
-
-  /* Stats の文言をやや小さく */
-  .stats__badge { font-size: 1em; }
-  .stats__note { font-size: var(--fs-14); }
-
-  /* About の見出しを少し縮小 */
-  .about__title { font-size: clamp(1.5rem, 5vw, 1.75rem); }
-
-  /* 会社概要：モバイルでは1項目ごとにブロック感を強める */
-  .company__table > div {
-    grid-template-columns: 1fr; /* ラベル/本文を縦積み */
-    gap: 6px;
-  }
-
-  /* Team 背景テキストを控えめに */
-  .team .container::before { -webkit-text-stroke: 2px rgba(11, 75, 242, .10); }
-
-  /* フッターのリンクは折り返し前提で余白調整 */
-  .site-footer nav a { display: inline-block; margin: 4px 8px; }
+/* ========== 4) ≤600px：文字と余白の微調整 ========== */
+@media (max-width: 600px){
+  body{ line-height:1.8; }
+  .hero__title{ line-height:1.12; }
+  .stats__badge{ font-size:1em; }
+  .stats__note{ font-size:var(--fs-14); }
+  .about__title{ font-size:clamp(1.5rem,5vw,1.75rem); }
+  .company__table>div{ grid-template-columns:1fr; gap:6px; }
+  .team .container::before{ -webkit-text-stroke:2px rgba(11,75,242,.10); }
+  .site-footer nav a{ display:inline-block; margin:4px 8px; }
 }
 
 
-/* ---------- 480px 以下：小型端末の微調整 ---------- */
-@media (max-width: 480px) {
+/* ========== 5) ≤480px：小型端末の微調整 ========== */
+@media (max-width: 480px){
+  .site-header .container{ padding-block:6px; }
+  .brand__logo{ width:44px; }
+  .nav-toggle{ min-width:36px; min-height:36px; }
 
-  /* ヘッダ */
-  .site-header .container { padding-block: 6px; }
-  .brand__logo { width: 44px; }
-  .nav-toggle { min-width: 36px; min-height: 36px; }
+  .hero__media img{ width:88%; }
 
-  /* Hero 画像をやや小さく */
-  .hero__media img { width: 88%; }
+  .logos__track{ gap:28px; animation-duration:36s; }
+  .logos__track img{ height:36px; }
 
-  /* ロゴスライダー */
-  .logos__track { gap: 28px; animation-duration: 36s; }
-  .logos__track img { height: 36px; }
+  .svc{ padding:16px; }
+  .svc__img{ height:180px; }
 
-  /* サービスカードのパディングを控えめに */
-  .svc { padding: 16px; }
-  .svc__img { height: 180px; }
+  .team__track{ grid-auto-columns:86%; }
 
-  /* Team：さらに1枚表示寄り */
-  .team__track { grid-auto-columns: 86%; }
+  .access__map iframe{ min-height:220px; }
 
-  /* アクセス地図の高さ */
-  .access__map iframe { min-height: 220px; }
-
-  /* 固定CTA ボタンをやや小ぶりに */
-  .btn-cta { padding: 10px 14px; font-size: var(--fs-14); border-radius: 999px; }
+  .btn-cta{ padding:10px 14px; font-size:var(--fs-14); border-radius:999px; }
 }
 
 
-/* ========================================
-   10) 汎用ユーティリティ（上書き補助）
-   ======================================== */
+/* ========== 6) 汎用：タップしやすさ/画像はみ出し/演出軽減 ========== */
+@media (max-width: 768px){
+  a,button{ touch-action:manipulation; }
+  .btn{ min-height:44px; }
+  img,video{ max-width:100%; height:auto; }
 
-/* タップしやすさ（小端末での a / button の最小サイズ目安） */
-@media (max-width: 768px) {
-  a, button { touch-action: manipulation; }
-  .btn { min-height: 44px; }
-}
-
-/* メディア（img, video）のはみ出し防止 */
-@media (max-width: 768px) {
-  img, video { max-width: 100%; height: auto; }
-}
-
-/* スクロールアニメの閾値が厳しすぎる時の救済（任意） */
-@media (max-width: 768px) {
-  .js-enabled .fade-up { transition-duration: .7s; transform: translateY(22px); }
+  /* スクロール演出の移動量を控えめに（視差酔い対策） */
+  .js-enabled .fade-up{ transition-duration:.7s; transform:translateY(22px); }
 }

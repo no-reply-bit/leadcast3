@@ -172,7 +172,6 @@ const closeNav = () => {
 
   navToggle.setAttribute('aria-expanded', 'false');
   navToggle.setAttribute('aria-label', 'メニューを開く');
-  navToggle.textContent = '☰';          // ← ハンバーガーに戻す
 };
 
 const openNav = () => {
@@ -183,7 +182,6 @@ const openNav = () => {
 
   navToggle.setAttribute('aria-expanded', 'true');
   navToggle.setAttribute('aria-label', 'メニューを閉じる');
-  navToggle.textContent = '✕';           // ← 閉じる表示に変更
 };
 
 // 既存のクリック/ESCハンドラはそのまま利用（toggleしている箇所も既存でOK）
